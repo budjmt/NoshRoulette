@@ -1,10 +1,12 @@
 "use strict";
 
+var proxyurl = 'js/proxy.php';
+
 function getRequest(params) {
 	//ex: https://api.yelp.com/v2/search?term=restaurants&cll=0,0&radius_filter=25
 	var httpMethod = 'GET',
-		url = "https://api.yelp.com/v2/search/",
-		parameters = {
+		url = "https://api.yelp.com/v2/search/";
+		/*parameters = {
 			oauth_consumer_key : 'kP7zkeziNQdtSvYTezywjg',
 			oauth_token : 'bdEkpVNQ4JZghLroR8AlY_YsRy04ioOp',
 			oauth_signature_method : 'HMAC-SHA1',
@@ -22,16 +24,30 @@ function getRequest(params) {
 		
 		parameters.oauth_signature = encodedSignature;
 		for(var param in params)
-			parameters[param] = params[param];
+			parameters[param] = params[param];*/
 		//console.log(parameters);
 		
+		
+		
+		//function yay() { console.log('yay') }*/
+		
+		var queryString = '';
+		for(var param in params) {
+			//console.log(parameters[param]);
+			queryString += param + '=' + params[param] + '&';
+		}
+		queryString = queryString.slice(0,-1);
+		//console.log(queryString);
+		
+		var proxyQuery = proxyurl + '?url=' + encodeURIComponent('v2/search?' + queryString);
+		
 		/*$.ajax({ 
-			url : url,
+			url : proxyurl,
 			//xhrField : { withCredentials : true },
-			data : parameters,
-			contentType : 'application/json',
-			dataType : 'jsonp',
-			jsonp : false
+			data : { url : 'v2/search?' + queryString },
+			//contentType : 'application/json',
+			//dataType : 'jsonp',
+			//jsonp : false
 			//jsonpCallback: 'yay'
 		})
 		.done(function(response) {
@@ -40,24 +56,14 @@ function getRequest(params) {
 		})
 		.fail(function(xhr, status, error) {
 			console.log(xhr);
-		});
-		
-		function yay() { console.log('yay') }*/
-		
-		var queryString = '?';
-		for(var param in parameters) {
-			//console.log(parameters[param]);
-			queryString += param + '=' + parameters[param] + '&';
-		}
-		queryString = queryString.slice(0,-1);
-		//console.log(queryString);
+		});*/
 		
 		var xhr = new XMLHttpRequest();
 		if("withCredentials" in xhr)
-			xhr.open(httpMethod,url + queryString,true);
+			xhr.open(httpMethod,proxyQuery,true);
 		else if(typeof XDomainRequest != "undefined") {
 			xhr = new XDomainRequest();
-			xhr.open(httpMethod,url + queryString);
+			xhr.open(httpMethod,proxyQuery);
 		}
 		else
 			xhr = null;
@@ -65,7 +71,7 @@ function getRequest(params) {
 			alert("CORS not supported");
 			return;
 		}
-		xhr.setRequestHeader('Content-Type','application/json');
+		//xhr.setRequestHeader('Content-Type','application/json');
 		
 		/*var oauthStr = 'OAuth ';
         oauthStr += 'oauth_consumer_key="' + parameters.oauth_consumer_key + '", ';
@@ -82,8 +88,9 @@ function getRequest(params) {
 		xhr.onload = function() {
 			if(xhr.readyState == 4 && xhr.status == 200) {
 				console.log("Success!");
+				//console.log(xhr);
 				var results = JSON.parse(xhr.responseText);
-				console.log(results);
+				displayOnMap(results);
 			}
 		}
 		
