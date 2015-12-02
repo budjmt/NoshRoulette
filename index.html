@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-
-<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
     <title>Nosh Roulette!</title>
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-	<style> #map { height: 500px; }</style>
+	<style> #map { height: 600px; }</style>
 </head>
 <body>
     <div id="containsEverything">
@@ -17,6 +15,7 @@
         <div id="map">
         </div>
         <div id="interface">
+		<!--yo we should use flexboxes so we don't need multiple divs to divide things-->
             <div class="interfaceSuper">
                 <div class="interfaceItem">
                     <label for="category">Category</label>
@@ -25,7 +24,7 @@
                         <option value="italian">Italian</option>
                         <option value="mexican">Mexican</option>
                         <option value="korean">Korean</option>
-                        <option value="american">American</option>
+                        <option value="tradamerican">American</option>
                     </select>
                 </div>
                 <div class="interfaceItem">
@@ -34,7 +33,7 @@
                         <option value="2">Walking - Within 2 miles</option>
                         <option value="5">Close - Within 5 miles</option>
                         <option value="10">Medium - Within 10 miles</option>
-                        <option value="50">Far - Within 50 miles</option>
+                        <option value="25">Far - Within 25 miles</option>
                     </select>
                 </div>
             </div>
@@ -52,9 +51,16 @@
                 <input id="rating" type ="range" min ="0" max="5" step ="1" value ="3"/>
                 </div>
             </div>
+			<div class="interfaceSuper">
+				<div class="interfaceItem">
+				<button id="searchButton">Search!</button>
+				</div>
+			</div>
         </div>
     </div>
-	
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/map.js"></script>
+<script src="js/yelp.js"></script>
 <script src="js/main.js"></script>
 <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIKIpd6JU-dGcu1D4zPh2cu9Yl4_ou03c&callback=initMap">

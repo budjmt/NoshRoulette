@@ -1,6 +1,6 @@
 "use strict";
 
-var proxyurl = 'js/proxy.php';
+var proxyurl = 'js/yelp_api_proxy.php';
 
 function getRequest(params) {
 	//ex: https://api.yelp.com/v2/search?term=restaurants&cll=0,0&radius_filter=25
@@ -90,7 +90,7 @@ function getRequest(params) {
 				console.log("Success!");
 				//console.log(xhr);
 				var results = JSON.parse(xhr.responseText);
-				displayOnMap(results);
+				displayOnMap(results);//in map.js
 			}
 		}
 		

@@ -24,7 +24,7 @@ function init() {
 			//filter for rating after data is retrieved
 		}
 		//console.log(query);
-		getRequest(query);
+		getRequest(query);//in yelp.js
 	}
 }
 
