@@ -7,7 +7,9 @@ var myMarker;
 
 var markerCss = '<style>b { font-weight: bold; }'
 markerCss += '.price { font-weight: bold; color: green }';
-markerCss += '.price::after { content: attr(data-remainder) color: grey; }'
+markerCss += '.price::after { content: attr(data-remainder); color: grey; margin-right: 10px; }';
+markerCss += '.extra { font-weight: bold; }';
+markerCss += '</style>';
 
 var rochester;
 var initialLocation;
@@ -68,14 +70,16 @@ function addMarker(position,title,ratingImg,img,address,phone,website,hours,menu
 	var info = markerCss;
 	info += '<p><b>' + title + '</b></p>';
 	info += '<p><img src="' + ratingImg + '" /></p>';
-	info += '<p class="price" data-remainder="' + price.data_remainder + '">' 
-			+ "$$$$".substring(price.data_remainder.length) + '</p>';
-	info += ' $' + price.price_range[0] + '-' + price.price_range[1];
+	if(price) {
+		info += '<p><span class="price" data-remainder="' + price.data_remainder + '">' 
+			+ "$$$$".substring(price.data_remainder.length) + '</span>';
+		info += '<span><b>' + price.price_range + '</b></span></p>';
+	}
 	if(img)
 		info += '<p><img src="' + img + '" /></p>';
 	info += '<p>' + address + '</p>';
-	if(hours) info += hours.outerHTML;//already a table element
-	if(menu)  info += '<p>' + menu.outerHTML + '</p>';
+	if(hours) info += hours;//already a table element
+	if(menu)  info += '<p><b>' + menu + '</b></p>';//already a link element
 	info += '<p><b>Phone:</b> ' + phone + '</p>';
 	info += '<p><b>Website:</b> <a href="' + website + '">' + website + '</a></p>';
 	marker.setTitle(info);
@@ -126,37 +130,58 @@ function displayOnMap(results) {
 	for(var i = 0;i < results.businesses.length;i++) {
 		//data
 		deferreds.push($.get(proxyQuery + encodeURI(results.businesses[i].url), {
-				delay: i + 1
+				delay: i + 1,
+				timeout: 45000
 		}).success(function(data) {
 			data = data.replace(/\r?\n|\r/g,'');
-			var results = $($.parseHTML(data));
-			var restData = $(results.find('.summary').children()[0]);
+			data = data.substring(data.indexOf('<body'));
+			data = '<html>' + data;
+			var html = $.parseHTML(data);
+			var restData;
+			for(var node of html) {
+				if(node.outerHTML)
+					restData = $(node.outerHTML).find('.summary').children()[0];
+					if(restData)
+						break;
+			}
 			
 			//var todayHours = restData.find('.hour-range');
-			var weekHours = results.find('.hours-table');
+			var weekHours = $(html).find('.hours-table')[0];
+			if(weekHours) { weekHours = weekHours.outerHTML; }
 			
-			var menuLink = restData.find('.menu-explore');
-			if(menuLink) menuLink = menuLink[0];
+			var menuLink = $(restData).find('.menu-explore')[0];
+			if(menuLink) { 
+				menuLink = menuLink.outerHTML;
+				menuLink = menuLink.replace('href="','href="http://yelp.com');
+			}
 			
-			var priceRange = restData.find('.price-range').get(0),
-				priceData = restData.find('.price-description').get(0);
-			priceData = priceData.innerHTML;
-			var sep = priceData.indexOf('-');
-			priceData = [parseFloat(priceData.substring(1,sep))
-						,parseFloat(priceData.substring(sep + 1))];
-			priceRange = { price_range    : priceData
-						 , data_remainder : priceRange.getAttribute('data-remainder') };
-			
+			var priceRange = $(restData).find('.price-range')[0];
+			var priceData;
+			if(priceRange) {
+				var dataRemainder = priceRange.getAttribute('data-remainder');
+				if(dataRemainder.length < 1)
+					priceData = "Above $61";
+				else if(dataRemainder.length < 2)
+					priceData = "$31-60";
+				else if(dataRemainder.length < 3)
+					priceData = "$11-30";
+				else
+					priceData = "Under $10";
+				priceRange = { price_range   : priceData
+							, data_remainder : dataRemainder };
+			}
 			extraResults.push({
 				//todayHours : todayHours,
 				weekHours  : weekHours,
 				menuLink   : menuLink,
 				priceRange : priceRange
 			});
+			console.log("done");
 		}));
 	}
 	
 	$.when.apply(null, deferreds).done(function() {
+		console.log("begin processing");
 		for(var i = 0;i < results.businesses.length;i++) {
 			var business = results.businesses[i];
 			var coord = new google.maps.LatLng(business.location.coordinate.latitude
@@ -168,7 +193,8 @@ function displayOnMap(results) {
 			address += ' ' + business.location.postal_code;
 			
 			var extraBusinessData = extraResults[i];
-			console.log(extraBusinessData);
+			console.dir(extraBusinessData);
+			
 			addMarker(coord,business.name,business.rating_img_url,business.image_url
 			,address,business.display_phone,business.url
 			,extraBusinessData.weekHours,extraBusinessData.menuLink,extraBusinessData.priceRange);

@@ -25,5 +25,6 @@
 		header('Content-Length: ' . $info['size_download']);
 	}
 	
+	$result = preg_replace('/(\s)+/', ' ', $result);
 	echo($result);
 ?>
