@@ -5,18 +5,16 @@
     <title>Nosh Roulette!</title>
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-	<style> #map { height: 600px; }</style>
+	<link href='https://fonts.googleapis.com/css?family=Alfa+Slab+One|Merriweather:400,700|Bree+Serif' rel='stylesheet' type='text/css'>
 </head>
 <body>
     <div id="containsEverything">
         <div id="title">
             <h1>Nosh Roulette!</h1>
         </div>
-        <div id="map">
-        </div>
+        <div id=mapBackground><div id="map"></div></div>
         <div id="interface">
 		<!--yo we should use flexboxes so we don't need multiple divs to divide things-->
-            <div class="interfaceSuper">
                 <div class="interfaceItem">
                     <label for="category">Category</label>
                     <select id="category">
@@ -36,8 +34,6 @@
                         <option value="25">Far - Within 25 miles</option>
                     </select>
                 </div>
-            </div>
-            <div class="interfaceSuper">
                 <div class="interfaceItem">
                     <label for="pricePoint">Price</label>
                     <select id="pricePoint">
@@ -46,16 +42,13 @@
                         <option value="3">High - More than $20 per person</option>
                     </select>
                 </div>
-            <div class="interfaceItem">
-                <label for="rating">Rating</label>            
-                <input id="rating" type ="range" min ="0" max="5" step ="1" value ="3"/>
-                </div>
-            </div>
-			<div class="interfaceSuper">
 				<div class="interfaceItem">
-				<button id="searchButton">Search!</button>
+					<label for="rating">Rating</label>            
+					<input id="rating" type ="range" min ="0" max="5" step ="1" value ="3"/>
+                </div>
+					<div class="interfaceItem">
+					<button id="searchButton">Search!</button>
 				</div>
-			</div>
         </div>
     </div>
 <script src="js/jquery-2.1.4.min.js"></script>
