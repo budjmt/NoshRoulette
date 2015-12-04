@@ -5,6 +5,7 @@
     <title>Nosh Roulette!</title>
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/jUI-style.css">
 	<link href='https://fonts.googleapis.com/css?family=Alfa+Slab+One|Merriweather:400,700|Bree+Serif' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -13,8 +14,11 @@
             <h1>Nosh Roulette!</h1>
         </div>
         <div id=mapBackground><div id="map"></div></div>
-        <div id="interface">
-		<!--yo we should use flexboxes so we don't need multiple divs to divide things-->
+        
+		<div id="accordion">
+			<h3>Interface</h3>
+			<div>
+				<div id="interface">
                 <div class="interfaceItem">
                     <label for="category">Category</label>
                     <select id="category">
@@ -49,11 +53,22 @@
 					<div class="interfaceItem">
 					<button id="searchButton">Search!</button>
 				</div>
+					
+				<!-- ui-dialog -->
+				<!--
+				<div id="dialog" title="Butts">
+					<p>Butts</p>
+				</div>
+				-->
         </div>
+			</div>
+		</div>
     </div>
 <script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/jquery-ui.js"></script>
 <script src="js/map.js"></script>
 <script src="js/yelp.js"></script>
+<script src="js/jUI-setup.js"></script>
 <script src="js/main.js"></script>
 <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIKIpd6JU-dGcu1D4zPh2cu9Yl4_ou03c&callback=initMap">
