@@ -5,7 +5,8 @@
     <title>Nosh Roulette!</title>
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-	<link rel="stylesheet" type="text/css" href="css/jUI-style.css">
+	<link rel="stylesheet" type="text/css" href="css/interface.css">
+	<link rel="stylesheet" type="text/css" href="css/liteaccordion.css">
 	<link href='https://fonts.googleapis.com/css?family=Alfa+Slab+One|Merriweather:400,700|Bree+Serif' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -13,56 +14,57 @@
         <div id="title">
             <h1>Nosh Roulette!</h1>
         </div>
-        <div id=mapBackground><div id="map"></div></div>
+		
+        <div id=mapBackground><div id="map"></div>
+		</div>
         
-		<div id="accordion">
+		<div id="Popout">
+				<h3>Popout</h3>
+				<div id="interior">Butts</div>
+		</div>
+		
+		<div id="accordion" class=accordion-interior>
 			<h3>Interface</h3>
-			<div>
+			<div class=accordion-interior>
 				<div id="interface">
-                <div class="interfaceItem">
-                    <label for="category">Category</label>
-                    <select id="category">
-                        <option value="chinese">Chinese</option>
-                        <option value="italian">Italian</option>
-                        <option value="mexican">Mexican</option>
-                        <option value="korean">Korean</option>
-                        <option value="tradamerican">American</option>
-                    </select>
-                </div>
-                <div class="interfaceItem">
-                    <label for="distance">Distance</label>
-                    <select id="distance">
-                        <option value="2">Within 2 miles</option>
-                        <option value="5">Within 5 miles</option>
-                        <option value="10">Within 10 miles</option>
-                        <option value="25">Within 25 miles</option>
-                    </select>
-                </div>
-                <div class="interfaceItem">
-                    <label for="pricePoint">Price</label>
-                    <select id="pricePoint">
-                        <option value="1">Under $10 per person</option>
-                        <option value="2">Under $20 per person</option>
-                        <option value="3">$20+ per person</option>
-                    </select>
-                </div>
-				<div class="interfaceItem">
-					<label for="rating">Rating</label>            
-					<input id="rating" type ="range" min ="0" max="5" step ="1" value ="3"/>
-                </div>
 					<div class="interfaceItem">
-					<button id="searchButton">Search!</button>
+						<label for="category">Category</label>
+						<select id="category">
+							<option value="chinese">Chinese</option>
+							<option value="italian">Italian</option>
+							<option value="mexican">Mexican</option>
+							<option value="korean">Korean</option>
+							<option value="tradamerican">American</option>
+						</select>
+					</div>
+					<div class="interfaceItem">
+						<label for="distance">Distance</label>
+						<select id="distance">
+							<option value="2">Within 2 miles</option>
+							<option value="5">Within 5 miles</option>
+							<option value="10">Within 10 miles</option>
+							<option value="25">Within 25 miles</option>
+						</select>
+					</div>
+					<div class="interfaceItem">
+						<label for="pricePoint">Price</label>
+						<select id="pricePoint">
+							<option value="1">Under $10 per person</option>
+							<option value="2">Under $20 per person</option>
+							<option value="3">$20+ per person</option>
+						</select>
+					</div>
+					<div class="interfaceItem">
+						<label for="rating">Rating</label>            
+						<input id="rating" type ="range" min ="0" max="5" step ="1" value ="3"/>
+					</div>
+					<div class="interfaceItem">
+						<button id="searchButton">Search!</button>
+					</div>
 				</div>
-					
-				<!-- ui-dialog -->
-				<!--
-				<div id="dialog" title="Butts">
-					<p>Butts</p>
-				</div>
-				-->
-        </div>
 			</div>
 		</div>
+		
     </div>
 <script src="js/jquery-2.1.4.min.js"></script>
 <script src="js/jquery-ui.js"></script>

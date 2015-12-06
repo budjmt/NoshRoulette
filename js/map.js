@@ -60,7 +60,9 @@ function addBasicMarker(position,title) {
 	var style = '<style>b { font-weight: bold; } p { min-width: 25px; overflow: hidden; }</style>';
 	marker.setTitle(style + '<p><b>' + title + '</b></p>');
 	google.maps.event.addListener(marker,'click',function(e) {
-	makeInfoWindow(this.position,this.title);
+		//debugger;
+		$("#Popout").accordion({active:0});
+		//document.querySelector("#Popout").style.visibility = "visible";
 	});
 	markers.push(marker);
 }
@@ -85,7 +87,9 @@ function addMarker(position,title,ratingImg,img,address,phone,website,hours,menu
 	marker.setTitle(info);
 	//console.log(info);
 	google.maps.event.addListener(marker,'click',function(e) {
-	makeInfoWindow(this.position,this.title);
+		$("#Popout").accordion({active:0});
+		//document.querySelector("#Popout").style.visibility = "visible";
+		document.querySelector("#interior").innerHTML = info;
 	});
 	markers.push(marker);
 }
