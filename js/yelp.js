@@ -37,7 +37,7 @@ yelpClass.prototype.getRequest = function(params) {
 			if(xhr.readyState == 4 && xhr.status == 200) {
 				//console.log("Success!");
 				var results = JSON.parse(xhr.responseText);
-				displayOnMap(results);//in map.js
+				map.displayOnMap(results);//in map.js
 			}
 		}
 		

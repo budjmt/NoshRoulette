@@ -3,10 +3,86 @@
 //reason this is global is so the google maps callback can work
 var map = new mapClass();
 
-(function(){
+window.onload = (function(){
 	
 var category, distance, pricePoint, rating;
 var yelp = new yelpClass();
+
+init();
+
+$( "#accordion" ).accordion({
+    collapsible: true,
+    active: false,
+});
+
+$( "#Popout" ).accordion({
+    collapsible: true,
+    active: false,
+});
+$( "#loading" ).accordion({
+    collapsible: true,
+    active: false,
+});
+
+var stars;
+var rating;
+
+function setupStars(){
+	
+	var children = stars = document.querySelector("#starRate").children;
+	stars = new Array();
+	for(var i = 0; i < children.length; i++){
+		stars.push(children[i]);
+		switch(i){
+			case 0:
+				stars[i].onmouseover = function(){starRating(1);};
+				stars[i].onclick = function(){starClick(0);};
+				break;
+			case 1:
+				stars[i].onmouseover = function(){starRating(2);};
+				stars[i].onclick = function(){starClick(1);};
+				break;
+			case 2:
+				stars[i].onmouseover = function(){starRating(3);};
+				stars[i].onclick = function(){starClick(2);};
+				break;
+			case 3:
+				stars[i].onmouseover = function(){starRating(4);};
+				stars[i].onclick = function(){starClick(3);};
+				break;
+			case 4:
+				stars[i].onmouseover = function(){starRating(5);};
+				stars[i].onclick = function(){starClick(4);};
+				break;
+		}
+		stars[i].onmouseout = setToRating;
+		
+	}
+}
+
+function starClick(i){
+	rating = i+1;
+}
+
+function setToRating() {
+	resetRating();
+	for(var i = 0; i < rating; i++){
+		stars[i].children[0].src="css/yelp-star.png";
+	}
+}
+
+function resetRating() {
+	for(var i = 0; i < 5; i++){
+		stars[i].children[0].src="css/yelp-star-bw.png";
+	}
+}
+
+function starRating(e){
+	resetRating();
+	for(var i = 0; i < e; i++){
+		stars[i].children[0].src="css/yelp-star.png";
+	}
+}
 
 function init() {
 	
@@ -16,11 +92,13 @@ function init() {
 	pricePoint = document.getElementById('pricePoint');	
 	rating = document.getElementById('rating');	
 	
+	setupStars();
+	
 	document.getElementById('searchButton').onclick = function() {
 		
 	$("#loading").accordion({active:0});
 		
-	var latlng = { lat : initialLocation.lat(), lng : initialLocation.lng() },
+	var latlng = { lat : map.initialLocation.lat(), lng : map.initialLocation.lng() },
 			//convert miles to meters
 			radius = distance.options[distance.selectedIndex].value * 1609.34;
 		//function doesn't work yet, actually we don't need it, tbd
@@ -39,7 +117,7 @@ function init() {
 	}
 }
 
-window.onload = init;
+
 
 /*
 Computes the bounding lat-long coordinates for a box containing a circle of radius rad in meters.
