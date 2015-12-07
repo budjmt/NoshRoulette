@@ -222,6 +222,7 @@ mapClass.prototype.displayOnMap = function(results,rating) {
 			//var temp = document.querySelector("#loading");
 			//debugger;
 			alert("No results found");
+			$("#loading").accordion({active:'none'});
 		}
 		else{
 			var filterCount = 0;
@@ -249,6 +250,7 @@ mapClass.prototype.displayOnMap = function(results,rating) {
 			//done here
 			if(filterCount == results.businesses.length)
 				alert('No results found at that rating');
+			
 			$("#loading").accordion({active:'none'});
 		}
 		

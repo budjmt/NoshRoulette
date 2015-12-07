@@ -30,7 +30,7 @@ $( "#loading" ).accordion({
 });
 
 var stars;
-var rating = 0;
+var rating;
 
 function setupStars(){
 	var children = document.querySelector("#starRate").children;
@@ -62,6 +62,7 @@ function setupStars(){
 		stars[i].onmouseout = setToRating;
 	}
 	//console.log(stars);
+	rating = 0;
 }
 
 function starClick(i){
