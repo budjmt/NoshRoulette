@@ -1,0 +1,9 @@
+#starRate{
+  display:flex;
+  justify-content:center
+}
+
+.star img{
+  flex-grow:0;
+  width:95%;
+}

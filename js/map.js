@@ -56,13 +56,13 @@ function initMap() {
 }
 
 function addBasicMarker(position,title) {
-	var marker = new google.maps.Marker({position: position, map: map});
+	var marker = new google.maps.Marker({position: position, map: map,
+										icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+										});
 	var style = '<style>b { font-weight: bold; } p { min-width: 25px; overflow: hidden; }</style>';
 	marker.setTitle(style + '<p><b>' + title + '</b></p>');
 	google.maps.event.addListener(marker,'click',function(e) {
-		//debugger;
-		$("#Popout").accordion({active:0});
-		//document.querySelector("#Popout").style.visibility = "visible";
+	
 	});
 	markers.push(marker);
 }
@@ -70,28 +70,43 @@ function addBasicMarker(position,title) {
 function addMarker(position,title,ratingImg,img,address,phone,website,hours,menu,price) {
 	var marker = new google.maps.Marker({position: position, map: map});
 	var info = markerCss;
-	info += '<p><b>' + title + '</b></p>';
-	info += '<p><img src="' + ratingImg + '" /></p>';
+	info += "<div id = popContent>"
+	info += "<div class=popText>";
+	info += '<h3 id=popTitle>' + title + '</h3>';
+	info += '<img id=rating src="' + ratingImg + '" />';
+	/*
 	if(price) {
 		info += '<p><span class="price" data-remainder="' + price.data_remainder + '">' 
 			+ "$$$$".substring(price.data_remainder.length) + '</span>';
 		info += '<span><b>' + price.price_range + '</b></span></p>';
 	}
+	*/
 	if(img)
-		info += '<p><img src="' + img + '" /></p>';
-	info += '<p>' + address + '</p>';
-	if(hours) info += hours;//already a table element
-	if(menu)  info += '<p><b>' + menu + '</b></p>';//already a link element
-	info += '<p><b>Phone:</b> ' + phone + '</p>';
-	info += '<p><b>Website:</b> <a href="' + website + '">' + website + '</a></p>';
+		info += '<p><img id=picture src="' + img + '" /></p>';
+	info += "</div>";
+	info += "<div class=popText>";
+	info += '<p class=interiorText>' + address + '</p>';
+	//if(hours) info += hours;//already a table element
+	//if(menu)  info += '<p><b>' + menu + '</b></p>';//already a link element
+	info += '<h3 class=interiorText>Phone: ' + phone + '</h3>';
+	info += '<h3 class=interiorText>Website:</h3> <a href="' + website + '">' + website + '</a></p>';
+	info += "</div>";
+	info += '<button id="closeButton">close</button>'
+	info += "</div>";
 	marker.setTitle(info);
 	//console.log(info);
 	google.maps.event.addListener(marker,'click',function(e) {
 		$("#Popout").accordion({active:0});
 		//document.querySelector("#Popout").style.visibility = "visible";
 		document.querySelector("#interior").innerHTML = info;
+		
+		document.querySelector("#closeButton").onclick =  closePopUp;
 	});
 	markers.push(marker);
+}
+
+function  closePopUp(){
+	$("#Popout").accordion({active:'none'});
 }
 
 function makeInfoWindow(position,msg) {
@@ -180,28 +195,36 @@ function displayOnMap(results) {
 				menuLink   : menuLink,
 				priceRange : priceRange
 			});
-			console.log("done");
 		}));
 	}
 	
 	$.when.apply(null, deferreds).done(function() {
-		console.log("begin processing");
-		for(var i = 0;i < results.businesses.length;i++) {
-			var business = results.businesses[i];
-			var coord = new google.maps.LatLng(business.location.coordinate.latitude
-											,business.location.coordinate.longitude);
-			var address = '';
-			for(var j = 0;j < business.location.address.length;j++)
-				address += business.location.address[j] + ' ';
-			address += business.location.city + ', ' + business.location.state_code;
-			address += ' ' + business.location.postal_code;
-			
-			var extraBusinessData = extraResults[i];
-			console.dir(extraBusinessData);
-			
-			addMarker(coord,business.name,business.rating_img_url,business.image_url
-			,address,business.display_phone,business.url
-			,extraBusinessData.weekHours,extraBusinessData.menuLink,extraBusinessData.priceRange);
+		if (results.businesses.length == 0) {
+			var temp = document.querySelector("#loading");
+			debugger;
+			temp.innerHTML = "<p>No data found</p>";
 		}
+		else{
+			for(var i = 0;i < results.businesses.length;i++) {
+				var business = results.businesses[i];
+				var coord = new google.maps.LatLng(business.location.coordinate.latitude
+												,business.location.coordinate.longitude);
+				var address = '';
+				for(var j = 0;j < business.location.address.length;j++)
+					address += business.location.address[j] + ' ';
+				address += business.location.city + ', ' + business.location.state_code;
+				address += ' ' + business.location.postal_code;
+				
+				var extraBusinessData = extraResults[i];
+				//console.dir(extraBusinessData);
+				
+				addMarker(coord,business.name,business.rating_img_url,business.image_url
+				,address,business.display_phone,business.url
+				,extraBusinessData.weekHours,extraBusinessData.menuLink,extraBusinessData.priceRange);
+			}
+			//done here
+			$("#loading").accordion({active:'none'});
+		}
+		
 	});
 }

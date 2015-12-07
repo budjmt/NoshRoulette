@@ -5,6 +5,22 @@ body{
     justify-content:center;
 }
 
+#yelpStarBW{
+    visibility: hidden;
+}
+#yelpStar{
+    visibility: hidden;
+}
+
+#yelpLogo{
+    position: fixed;
+    bottom:0;
+    right:0;
+    opacity: 0.2;
+    
+    
+}
+
 #containsEverything{
     background: #EEE;
     

@@ -87,7 +87,7 @@ function getRequest(params) {
 		
 		xhr.onload = function() {
 			if(xhr.readyState == 4 && xhr.status == 200) {
-				console.log("Success!");
+				//console.log("Success!");
 				//console.log(xhr);
 				var results = JSON.parse(xhr.responseText);
 				displayOnMap(results);//in map.js
@@ -96,7 +96,7 @@ function getRequest(params) {
 		
 		xhr.onerror = function(response) {
 			alert("Error in XHR");
-			console.log(response);
+			//console.log(response);
 		}
 		xhr.send();
 }

@@ -6,11 +6,14 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/interface.css">
-	<link rel="stylesheet" type="text/css" href="css/liteaccordion.css">
+	<link rel="stylesheet" type="text/css" href="css/popup.css">
+	<link rel="stylesheet" type="text/css" href="css/stars.css">
+	<link rel="stylesheet" type="text/css" href="css/loading.css">
 	<link href='https://fonts.googleapis.com/css?family=Alfa+Slab+One|Merriweather:400,700|Bree+Serif' rel='stylesheet' type='text/css'>
 </head>
 <body>
     <div id="containsEverything">
+		<img id=yelpLogo src="yelp.png" alt="Logo">
         <div id="title">
             <h1>Nosh Roulette!</h1>
         </div>
@@ -20,11 +23,19 @@
         
 		<div id="Popout">
 				<h3>Popout</h3>
-				<div id="interior">Butts</div>
+				<div id="interior"></div>
+		</div>
+		<div id="loading">
+				<h3>Loading</h3>
+				<div id="loadingInterior">
+					<p>Loading</p>
+					<!--src http://stackoverflow.com/questions/15562145/animated-transparent-preloader-image-over-a-solid-colored-background -->
+					<img id=loadingImg src="css/SpinningWheel.gif" alt="Loading">
+				</div>
 		</div>
 		
 		<div id="accordion" class=accordion-interior>
-			<h3>Interface</h3>
+			<h3>&#x25B2;</h3>
 			<div class=accordion-interior>
 				<div id="interface">
 					<div class="interfaceItem">
@@ -55,8 +66,26 @@
 						</select>
 					</div>
 					<div class="interfaceItem">
-						<label for="rating">Rating</label>            
-						<input id="rating" type ="range" min ="0" max="5" step ="1" value ="3"/>
+						<label >Rating</label>
+						<div id="starRate">
+							
+							<div id=1star class=star >
+								<img src="css/yelp-star-bw.png" alt="rating star">
+							</div>
+							<div id=2star class=star>
+								<img src="css/yelp-star-bw.png" alt="rating star">
+							</div>
+							<div id=3star class=star>
+								<img src="css/yelp-star-bw.png" alt="rating star">
+							</div>
+							<div id=4star class=star>
+								<img src="css/yelp-star-bw.png" alt="rating star">
+							</div>
+							<div id=5star class=star>
+								<img src="css/yelp-star-bw.png" alt="rating star">
+							</div>
+						</div>
+						<!--<input id="rating" type ="range" min ="0" max="5" step ="1" value ="3"/>-->
 					</div>
 					<div class="interfaceItem">
 						<button id="searchButton">Search!</button>
@@ -72,6 +101,10 @@
 <script src="js/yelp.js"></script>
 <script src="js/jUI-setup.js"></script>
 <script src="js/main.js"></script>
+<script>
+	//window.onload=setupStars;
+	window.addEventListener("load", setupStars); 
+</script>
 <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIKIpd6JU-dGcu1D4zPh2cu9Yl4_ou03c&callback=initMap">
 </script>

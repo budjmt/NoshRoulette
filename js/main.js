@@ -9,6 +9,9 @@ function init() {
 	rating = document.getElementById('rating');	
 	
 	document.getElementById('searchButton').onclick = function() {
+		
+	$("#loading").accordion({active:0});
+		
 	var latlng = { lat : initialLocation.lat(), lng : initialLocation.lng() },
 			//convert miles to meters
 			radius = distance.options[distance.selectedIndex].value * 1609.34;

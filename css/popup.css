@@ -1,0 +1,58 @@
+#popContent{
+    margin: 0.125em;
+    padding: 0.25em;
+
+    width: 100%;
+    overflow: hidden;
+    
+    font-family: Merriweather;
+}
+
+#popTitle{
+    padding: 0.25em;
+    background-color: #9ab7d3;
+    
+    box-shadow: 0 0 10px rgba(10,10,10,0.25);
+    
+    flex-grow:1;
+    margin-left:auto;
+    margin-right:auto;
+    
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    
+    text-align: center;
+    
+    width: 80%;
+    font-size: 200%;
+}
+
+#rating{
+    margin:0.25em;
+}
+#picture{
+    margin:0.125em;
+}
+
+.popText{
+    border-radius: 5px;
+    
+    box-shadow: 0 0 10px rgba(10,10,10,0.25);
+    margin: 0.5em;
+    padding: 0.5em;
+    background-color: #A88;
+    
+    font-family: Merriweather;
+    font-size: 100%;
+    font-weight: 500;
+}
+
+.interiorText{
+    margin: 0.5em;
+}
+
+#popContent button{
+    width:60%;
+    height: 10vh;
+    font-size: 200%;
+}

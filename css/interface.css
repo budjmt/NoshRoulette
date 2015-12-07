@@ -17,7 +17,6 @@
     
     border-radius: 5px;
     
-    flex-basis:auto;
     flex-grow:1;
     display:flex;
     flex-wrap: wrap;
@@ -32,7 +31,6 @@
     background: #A88;
     text-align: center;
     
-    flex-basis:auto;
     flex-grow:1;
     display:flex;
     flex-wrap: wrap;
@@ -46,7 +44,6 @@
     font-size: 200%;
     margin: 0.25em;
     width: 100%;
-    flex-basis:auto;
     flex-grow:1;
     text-align: left;
     
@@ -55,16 +52,16 @@
 
 .interfaceItem select{
     margin: 0.25em;
-    flex-basis:auto;
     flex-grow:1;
     text-align: center;
     
     font-family: Merriweather;
 }
 
+
+
 .interfaceItem input{
     margin: 0.25em;
-    flex-basis:auto;
     flex-grow:1;
     text-align: left;
     
@@ -72,7 +69,6 @@
 }
 
 .interfaceItem button{
-    flex-basis:auto;
     flex-grow:1;
     text-align: left;
     
@@ -116,7 +112,6 @@
 
     width: 40%;
     
-    flex-basis:auto;
     flex-grow:0;
     display:flex;
     flex-wrap: wrap;
@@ -173,12 +168,11 @@
     border-radius:3px;
 
     display:flex;
-    justify-content:left;
 }
 #Popout #interior{
-    background: #F33;
+    background: rgba(10,10,10,0.3);
     
-    margin: 1em;
+    padding: 0.125em;
     
     border-radius: 10px;
      
@@ -187,7 +181,7 @@
     left:10%;
     
     width: 40%;
-    height:40vh;
+    height: 60vh;
     
     visibility: visible;
     
@@ -195,8 +189,14 @@
     
     box-shadow: 0 0 10px rgba(10,10,10,0.75);
     
-    flex-basis:auto;
     flex-grow:1;
     display:flex;
     flex-wrap: wrap;
+}
+
+@media (max-width: 800px) {
+    
+    #Popout #interior{
+        width: 80%;
+    }
 }
