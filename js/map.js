@@ -157,14 +157,14 @@ mapClass.prototype.drawPolygon = function(paths,title,position) {
 //need to add a way to zoom out to where the places are
 //and draw a circle around the results
 //also differentiate the color of you vs them
-mapClass.prototype.displayOnMap = function(results) {
+mapClass.prototype.displayOnMap = function(results,rating) {
 	if(this.infoWindow) this.infoWindow.close();
 	for(var i = 1;i < this.markers.length;i++)
 		this.markers[i].setMap(null);
 	this.markers = [];
 	this.markers.push(myMarker);
 	
-	var deferreds = [], extraResults = [], weekHours = [];
+	/*var deferreds = [], extraResults = [], weekHours = [];
 	var proxyQuery = 'js/restaurant_data_proxy.php?url=';
 	for(var i = 0;i < results.businesses.length;i++) {
 		//data
@@ -216,9 +216,9 @@ mapClass.prototype.displayOnMap = function(results) {
 				priceRange : priceRange
 			});
 		}));
-	}
+	}*/
 	
-	$.when.apply(null, deferreds).done(function() {
+	//$.when.apply(null, deferreds).done(function() {
 		if (results.businesses.length == 0) {
 			var temp = document.querySelector("#loading");
 			debugger;
@@ -227,6 +227,8 @@ mapClass.prototype.displayOnMap = function(results) {
 		else{
 			for(var i = 0;i < results.businesses.length;i++) {
 				var business = results.businesses[i];
+				if(business.rating < rating)
+					continue;
 				var coord = new google.maps.LatLng(business.location.coordinate.latitude
 												,business.location.coordinate.longitude);
 				var address = '';
@@ -246,5 +248,5 @@ mapClass.prototype.displayOnMap = function(results) {
 			$("#loading").accordion({active:'none'});
 		}
 		
-	});
+	//});
 }

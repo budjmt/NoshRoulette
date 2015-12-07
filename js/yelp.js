@@ -7,7 +7,7 @@ var yelpClass = function(){
 
 //var proxyurl = 'js/yelp_api_proxy.php';
 
-yelpClass.prototype.getRequest = function(params) {
+yelpClass.prototype.getRequest = function(params,rating) {
 	//ex: https://api.yelp.com/v2/search?term=restaurants&cll=0,0&radius_filter=25
 	var httpMethod = 'GET',
 		url = "https://api.yelp.com/v2/search/";
@@ -16,7 +16,7 @@ yelpClass.prototype.getRequest = function(params) {
 		for(var param in params) {
 			queryString += param + '=' + params[param] + '&';
 		}
-		queryString = queryString.slice(0,-1);
+		queryString += "limit=100";
 
 		var proxyQuery = this.proxyurl + '?url=' + encodeURIComponent('v2/search?' + queryString);
 		
@@ -37,7 +37,7 @@ yelpClass.prototype.getRequest = function(params) {
 			if(xhr.readyState == 4 && xhr.status == 200) {
 				//console.log("Success!");
 				var results = JSON.parse(xhr.responseText);
-				displayOnMap(results);//in map.js
+				displayOnMap(results,rating);//in map.js
 			}
 		}
 		

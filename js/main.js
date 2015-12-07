@@ -8,13 +8,35 @@ var map = new mapClass();
 var category, distance, pricePoint, rating;
 var yelp = new yelpClass();
 
+function updateUserPref(term,val) {
+		var key = 'mxc8518_noshroulette_' + term;
+		localStorage.setItem(key, val);
+	}
+
 function init() {
-	
-	
 	category = document.getElementById('category');	
 	distance = document.getElementById('distance');	
-	pricePoint = document.getElementById('pricePoint');	
+	//pricePoint = document.getElementById('pricePoint');	
 	rating = document.getElementById('rating');	
+	
+	var userCat    = localStorage.getItem('mxc8518_noshroulette_category'),
+		userDist   = localStorage.getItem('mxc8518_noshroulette_distance'),
+		userRating = localStorage.getItem('mxc8518_noshroulette_rating');
+	if(userCat != null)
+		category.selectedIndex = userCat;
+	if(userDist != null)
+		distance.selectedIndex = userDist;
+	if(userRating != null);
+		//category.selectedIndex = userCat;
+	
+	category.onchange = function() { 
+		//console.log("meow");
+		updateUserPref('category',category.selectedIndex); 
+	};
+	distance.onchange = function() {
+		//console.log('d');
+		updateUserPref('distance',distance.selectedIndex);
+	};
 	
 	document.getElementById('searchButton').onclick = function() {
 		
@@ -35,7 +57,7 @@ function init() {
 			//filter for rating after data is retrieved
 		}
 		//console.log(query);
-		yelp.getRequest(query);//in yelp.js
+		yelp.getRequest(query,3);//in yelp.js
 	}
 }
 
