@@ -120,13 +120,12 @@ mapClass.prototype.addMarker = function(position,title,ratingImg,img,address,pho
 		//document.querySelector("#Popout").style.visibility = "visible";
 		document.querySelector("#interior").innerHTML = info;
 		
-		document.querySelector("#closeButton").onclick =  closePopUp;
+		document.querySelector("#closeButton").onclick = function(){
+			$("#Popout").accordion({active:'none'});
+		};
+
 	});
 	this.markers.push(marker);
-}
-
-mapClass.prototype.closePopUp = function(){
-	$("#Popout").accordion({active:'none'});
 }
 
 mapClass.prototype.makeInfoWindow = function(position,msg) {
@@ -162,7 +161,7 @@ mapClass.prototype.displayOnMap = function(results,rating) {
 	for(var i = 1;i < this.markers.length;i++)
 		this.markers[i].setMap(null);
 	this.markers = [];
-	this.markers.push(myMarker);
+	this.markers.push(this.myMarker);
 	
 	/*var deferreds = [], extraResults = [], weekHours = [];
 	var proxyQuery = 'js/restaurant_data_proxy.php?url=';
@@ -240,7 +239,7 @@ mapClass.prototype.displayOnMap = function(results,rating) {
 				var extraBusinessData = extraResults[i];
 				//console.dir(extraBusinessData);
 				
-				addMarker(coord,business.name,business.rating_img_url,business.image_url
+				map.addMarker(coord,business.name,business.rating_img_url,business.image_url
 				,address,business.display_phone,business.url
 				,extraBusinessData.weekHours,extraBusinessData.menuLink,extraBusinessData.priceRange);
 			}
