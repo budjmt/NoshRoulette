@@ -16,7 +16,7 @@ yelpClass.prototype.getRequest = function(params,rating) {
 		for(var param in params) {
 			queryString += param + '=' + params[param] + '&';
 		}
-		queryString += "limit=100";
+		queryString += "limit=20";
 
 		var proxyQuery = this.proxyurl + '?url=' + encodeURIComponent('v2/search?' + queryString);
 		
@@ -37,7 +37,7 @@ yelpClass.prototype.getRequest = function(params,rating) {
 			if(xhr.readyState == 4 && xhr.status == 200) {
 				//console.log("Success!");
 				var results = JSON.parse(xhr.responseText);
-				map.displayOnMap(results);//in map.js
+				map.displayOnMap(results,rating);//in map.js
 			}
 		}
 		

@@ -30,11 +30,10 @@ $( "#loading" ).accordion({
 });
 
 var stars;
-var rating;
+var rating = 0;
 
 function setupStars(){
-	
-	var children = stars = document.querySelector("#starRate").children;
+	var children = document.querySelector("#starRate").children;
 	stars = new Array();
 	for(var i = 0; i < children.length; i++){
 		stars.push(children[i]);
@@ -61,13 +60,13 @@ function setupStars(){
 				break;
 		}
 		stars[i].onmouseout = setToRating;
-		
 	}
+	//console.log(stars);
 }
 
 function starClick(i){
 	rating = i+1;
-	updateUserPref('rating',i+1);
+	updateUserPref('rating',i);
 }
 
 function setToRating() {
@@ -79,7 +78,7 @@ function setToRating() {
 
 function resetRating() {
 	for(var i = 0; i < 5; i++){
-		stars[i].children[0].src="css/yelp-star-bw.png";
+		stars[i].children[0].src ="css/yelp-star-bw.png";
 	}
 }
 
@@ -91,6 +90,8 @@ function starRating(e){
 }
 
 function init() {
+	setupStars();
+	
 	category = document.getElementById('category');	
 	distance = document.getElementById('distance');	
 	//pricePoint = document.getElementById('pricePoint');	
@@ -103,8 +104,8 @@ function init() {
 		category.selectedIndex = userCat;
 	if(userDist != null)
 		distance.selectedIndex = userDist;
-	if(userRating != null) {
-		starClick(userRating);
+	if(userRating != null && parseFloat(userRating) <= 5) {
+		starClick(parseFloat(userRating));
 		setToRating();
 	}
 	
@@ -116,8 +117,6 @@ function init() {
 		//console.log('d');
 		updateUserPref('distance',distance.selectedIndex);
 	};
-	
-	setupStars();
 	
 	document.getElementById('searchButton').onclick = function() {
 		
@@ -136,9 +135,9 @@ function init() {
 			//pricePoint : pricePoint.value,//this is probably incorrect
 			//sorting for rating is done by yelp itself
 			//filter for rating after data is retrieved
-		}
+		};
 		//console.log(query);
-		yelp.getRequest(query,3);//in yelp.js
+		yelp.getRequest(query,rating);//in yelp.js
 	}
 }
 

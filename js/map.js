@@ -216,18 +216,21 @@ mapClass.prototype.displayOnMap = function(results,rating) {
 			});
 		}));
 	}*/
-	
+	//console.log(results);
 	//$.when.apply(null, deferreds).done(function() {
-		if (results.businesses.length == 0) {
-			var temp = document.querySelector("#loading");
-			debugger;
-			temp.innerHTML = "<p>No data found</p>";
+		if (results.total == 0) {
+			//var temp = document.querySelector("#loading");
+			//debugger;
+			alert("No results found");
 		}
 		else{
+			var filterCount = 0;
 			for(var i = 0;i < results.businesses.length;i++) {
 				var business = results.businesses[i];
-				if(business.rating < rating)
+				if(business.rating < rating) {
+					filterCount++;
 					continue;
+				}
 				var coord = new google.maps.LatLng(business.location.coordinate.latitude
 												,business.location.coordinate.longitude);
 				var address = '';
@@ -236,14 +239,16 @@ mapClass.prototype.displayOnMap = function(results,rating) {
 				address += business.location.city + ', ' + business.location.state_code;
 				address += ' ' + business.location.postal_code;
 				
-				var extraBusinessData = extraResults[i];
+				//var extraBusinessData = extraResults[i];
 				//console.dir(extraBusinessData);
 				
 				map.addMarker(coord,business.name,business.rating_img_url,business.image_url
-				,address,business.display_phone,business.url
-				,extraBusinessData.weekHours,extraBusinessData.menuLink,extraBusinessData.priceRange);
+				,address,business.display_phone,business.url);
+				//,extraBusinessData.weekHours,extraBusinessData.menuLink,extraBusinessData.priceRange);
 			}
 			//done here
+			if(filterCount == results.businesses.length)
+				alert('No results found at that rating');
 			$("#loading").accordion({active:'none'});
 		}
 		
