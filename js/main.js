@@ -1,8 +1,16 @@
 "use strict";
 
+//reason this is global is so the google maps callback can work
+var map = new mapClass();
+
+(function(){
+	
 var category, distance, pricePoint, rating;
+var yelp = new yelpClass();
 
 function init() {
+	
+	
 	category = document.getElementById('category');	
 	distance = document.getElementById('distance');	
 	pricePoint = document.getElementById('pricePoint');	
@@ -27,7 +35,7 @@ function init() {
 			//filter for rating after data is retrieved
 		}
 		//console.log(query);
-		getRequest(query);//in yelp.js
+		yelp.getRequest(query);//in yelp.js
 	}
 }
 
@@ -69,3 +77,4 @@ function computeBounds(latlng,rad) {
 	
 	return { sw : sw, ne : ne };
 }
+});

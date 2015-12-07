@@ -1,5 +1,23 @@
 "use strict";
 
+var mapClass = function Map(){
+	this.infoWindow;
+	this.markers = [];
+	this.myMarker;
+	
+	this.map;
+	
+	this.markerCss = '<style>b { font-weight: bold; }'
+	this.markerCss += '.price { font-weight: bold; color: green }';
+	this.markerCss += '.price::after { content: attr(data-remainder); color: grey; margin-right: 10px; }';
+	this.markerCss += '.extra { font-weight: bold; }';
+	this.markerCss += '</style>';
+	
+	this.rochester;
+	this.initialLocation;
+	this.geoSupportFlag = true;
+}
+/*
 var map;
 var infoWindow;
 var markers = [];
@@ -14,30 +32,30 @@ markerCss += '</style>';
 var rochester;
 var initialLocation;
 var geoSupportFlag = true;
-
-function initMap() {
-	rochester = new google.maps.LatLng(43.083848, -77.6799);
-	map = new google.maps.Map(document.getElementById('map'), {
-		center: rochester,
+*/
+function initMap(){
+	map.rochester = new google.maps.LatLng(43.083848, -77.6799);
+	map.map = new google.maps.Map(document.getElementById('map'), {
+		center: map.rochester,
 		zoom: 12,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	});
 	//w3c location stuff
 	if(navigator.geolocation) {
-		geoSupportFlag = true;
+		map.geoSupportFlag = true;
 		navigator.geolocation.getCurrentPosition(function(position) {
-		initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-		map.setCenter(initialLocation);
-		addBasicMarker(initialLocation,"You");
-		myMarker = markers[0];
+		map.initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+		map.map.setCenter(map.initialLocation);
+		map.addBasicMarker(map.initialLocation,"You");
+		map.myMarker = map.markers[0];
 		}, function() {
-		handleNoGeolocation(geoSupportFlag);
+		handleNoGeolocation(map.geoSupportFlag);
 		});
 	}
 	// Browser doesn't support Geolocation
 	else {
-		geoSupportFlag = false;
-		handleNoGeolocation(geoSupportFlag);
+		map.geoSupportFlag = false;
+		handleNoGeolocation(map.geoSupportFlag);
 	}
 	
 	function handleNoGeolocation(errorFlag) {
@@ -48,15 +66,15 @@ function initMap() {
 		alert("Your browser doesn't support geolocation. We've placed you in Rochester.");
 		initialLocation = rochester;
 		}
-		map.setCenter(initialLocation);
-		addBasicMarker(initialLocation,"You");
+		map.map.setCenter(initialLocation);
+		map.addBasicMarker(initialLocation,"You");
 	}
 	//map.mapTypeId = 'satellite';
 	//map.setTilt(45);
 }
 
-function addBasicMarker(position,title) {
-	var marker = new google.maps.Marker({position: position, map: map,
+mapClass.prototype.addBasicMarker = function(position,title) {
+	var marker = new google.maps.Marker({position: position, map: this.map,
 										icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
 										});
 	var style = '<style>b { font-weight: bold; } p { min-width: 25px; overflow: hidden; }</style>';
@@ -64,12 +82,12 @@ function addBasicMarker(position,title) {
 	google.maps.event.addListener(marker,'click',function(e) {
 	
 	});
-	markers.push(marker);
+	this.markers.push(marker);
 }
 
-function addMarker(position,title,ratingImg,img,address,phone,website,hours,menu,price) {
-	var marker = new google.maps.Marker({position: position, map: map});
-	var info = markerCss;
+mapClass.prototype.addMarker = function(position,title,ratingImg,img,address,phone,website,hours,menu,price) {
+	var marker = new google.maps.Marker({position: position, map: this.map});
+	var info = this.markerCss;
 	info += "<div id = popContent>"
 	info += "<div class=popText>";
 	info += '<h3 id=popTitle>' + title + '</h3>';
@@ -81,6 +99,8 @@ function addMarker(position,title,ratingImg,img,address,phone,website,hours,menu
 		info += '<span><b>' + price.price_range + '</b></span></p>';
 	}
 	*/
+	//Works, but yelp evetually blocked our IP's
+	
 	if(img)
 		info += '<p><img id=picture src="' + img + '" /></p>';
 	info += "</div>";
@@ -102,25 +122,25 @@ function addMarker(position,title,ratingImg,img,address,phone,website,hours,menu
 		
 		document.querySelector("#closeButton").onclick =  closePopUp;
 	});
-	markers.push(marker);
+	this.markers.push(marker);
 }
 
-function  closePopUp(){
+mapClass.prototype.closePopUp = function(){
 	$("#Popout").accordion({active:'none'});
 }
 
-function makeInfoWindow(position,msg) {
-	if(infoWindow) infoWindow.close();
-	infoWindow = new google.maps.InfoWindow({
-		map: map,
+mapClass.prototype.makeInfoWindow = function(position,msg) {
+	if(this.infoWindow) this.infoWindow.close();
+	this.infoWindow = new google.maps.InfoWindow({
+		map: this.map,
 		position: position,
 		content: msg
 	});
 }
 
-function drawPolygon(paths,title,position) {
+mapClass.prototype.drawPolygon = function(paths,title,position) {
 	var polygon = new google.maps.Polygon({
-	map: map,
+	map: this.map,
 	paths: paths,
 	fillColor: '#f0f',
 	fillOpacity: 0.3,
@@ -137,12 +157,12 @@ function drawPolygon(paths,title,position) {
 //need to add a way to zoom out to where the places are
 //and draw a circle around the results
 //also differentiate the color of you vs them
-function displayOnMap(results) {
-	if(infoWindow) infoWindow.close();
-	for(var i = 1;i < markers.length;i++)
-		markers[i].setMap(null);
-	markers = [];
-	markers.push(myMarker);
+mapClass.prototype.displayOnMap = function(results) {
+	if(this.infoWindow) this.infoWindow.close();
+	for(var i = 1;i < this.markers.length;i++)
+		this.markers[i].setMap(null);
+	this.markers = [];
+	this.markers.push(myMarker);
 	
 	var deferreds = [], extraResults = [], weekHours = [];
 	var proxyQuery = 'js/restaurant_data_proxy.php?url=';
