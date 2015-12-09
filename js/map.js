@@ -225,6 +225,7 @@ mapClass.prototype.displayOnMap = function(results,rating) {
 			$("#loading").accordion({active:'none'});
 		}
 		else{
+			console.log(results);
 			var filterCount = 0;
 			for(var i = 0;i < results.businesses.length;i++) {
 				var business = results.businesses[i];

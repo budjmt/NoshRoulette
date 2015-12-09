@@ -12,39 +12,39 @@ yelpClass.prototype.getRequest = function(params,rating) {
 	var httpMethod = 'GET',
 		url = "https://api.yelp.com/v2/search/";
 
-		var queryString = '';
-		for(var param in params) {
-			queryString += param + '=' + params[param] + '&';
+	var queryString = '';
+	for(var param in params) {
+		queryString += param + '=' + params[param] + '&';
+	}
+	queryString += "limit=20";
+    
+	var proxyQuery = this.proxyurl + '?url=' + encodeURIComponent('v2/search?' + queryString);
+	console.log(proxyQuery);
+	var xhr = new XMLHttpRequest();
+	if("withCredentials" in xhr)
+		xhr.open(httpMethod,proxyQuery,true);
+	else if(typeof XDomainRequest != "undefined") {
+		xhr = new XDomainRequest();
+		xhr.open(httpMethod,proxyQuery);
+	}
+	else
+		xhr = null;
+	if(!xhr) {
+		alert("CORS not supported");
+		return;
+	}
+	xhr.onload = function() {
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			//console.log("Success!");
+			var results = JSON.parse(xhr.responseText);
+			map.displayOnMap(results,rating);//in map.js
 		}
-		queryString += "limit=20";
-
-		var proxyQuery = this.proxyurl + '?url=' + encodeURIComponent('v2/search?' + queryString);
-		
-		var xhr = new XMLHttpRequest();
-		if("withCredentials" in xhr)
-			xhr.open(httpMethod,proxyQuery,true);
-		else if(typeof XDomainRequest != "undefined") {
-			xhr = new XDomainRequest();
-			xhr.open(httpMethod,proxyQuery);
-		}
-		else
-			xhr = null;
-		if(!xhr) {
-			alert("CORS not supported");
-			return;
-		}
-		xhr.onload = function() {
-			if(xhr.readyState == 4 && xhr.status == 200) {
-				//console.log("Success!");
-				var results = JSON.parse(xhr.responseText);
-				map.displayOnMap(results,rating);//in map.js
-			}
-		}
-		
-		xhr.onerror = function(response) {
-			alert("Error in XHR");
-		}
-		xhr.send();
+	}
+	
+	xhr.onerror = function(response) {
+		alert("Error in XHR");
+	}
+	xhr.send();
 }
 
 //var nonceCounter = 0;

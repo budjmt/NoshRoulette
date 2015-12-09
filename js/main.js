@@ -2,11 +2,13 @@
 
 //reason this is global is so the google maps callback can work
 var map = new mapClass();
+var sql = new SQLAgent();
+var yelp;
 
 window.onload = (function(){
 	
 var category, distance, pricePoint;
-var yelp = new yelpClass();
+yelp = new yelpClass();
 
 function updateUserPref(term,val) {
 	var key = 'mxc8518_noshroulette_' + term;
