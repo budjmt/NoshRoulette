@@ -350,16 +350,20 @@ SQLAgent.prototype.reviewSQL = function(id, username, restID, foodID, review) {
 	return sql;
 }
 
-SQLAgent.prototype.updateDistances = function() {
+SQLAgent.prototype.updateDB = function() {
 	var sql = 'SELECT * FROM Location;';
 	//pass sql to db
-	var results;
-	sql = '';
+	var locations;
 	for(var i = 0;i < results.length;i++) {
 		sql += 'UPDATE Location SET distFromUser='
-		var dist = google.maps.geometry.spherical.computeDistanceBetween(p1,p2).toFixed(2);
-		sql += dist + ' WHERE id=' results[i][id] + ';';
+		var dist = google.maps.geometry.spherical.computeDistanceBetween(
+		this.map.initialLocation
+		,new google.maps.LatLng(results[i]['latitude'],results[i]['longitude']).toFixed(2);
+		sql += dist + ' WHERE id=' results[i]['id'] + ';';
 	}
+	sql += ' WITH avgPrices AS (SELECT r2.id,AVG(price) AS avgPrice FROM MenuItem AS m JOIN Restaurant AS r2 ON m.restaurant=r2.id)';
+	sql += ' UPDATE r1 SET avgPrice=avgPrices.avgPrice';
+	sql += ' FROM Restaurant r1 JOIN avgPrices ON r1.id = avgPrices.id';
 	//pass updates to db
 }
 
@@ -369,7 +373,7 @@ SQLAgent.prototype.passRequest = function(params,rating) {
 	sql		+=' JOIN Location AS l WHERE l.id=r.location WHERE ';
 	sql		+=' c.[name]="' + params.category_filter + '"';
 	sql		+=' AND l.distanceFromUser<=' + params.radius_filter;
-	sql		+=' AND r.rating>=' + rating + ';';
+	sql		+=' AND r.avgRating>=' + rating + ';';
 	//pass on the sql
 	var results;
 	map.displaySQL(results);

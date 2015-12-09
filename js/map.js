@@ -92,13 +92,11 @@ mapClass.prototype.addMarker = function(position,title,ratingImg,img,address,pho
 	info += "<div class=popText>";
 	info += '<h3 id=popTitle>' + title + '</h3>';
 	info += '<img id=rating src="' + ratingImg + '" />';
-	/*
 	if(price) {
 		info += '<p><span class="price" data-remainder="' + price.data_remainder + '">' 
 			+ "$$$$".substring(price.data_remainder.length) + '</span>';
 		info += '<span><b>' + price.price_range + '</b></span></p>';
 	}
-	*/
 	//Works, but yelp evetually blocked our IP's
 	
 	if(img)
@@ -256,4 +254,47 @@ mapClass.prototype.displayOnMap = function(results,rating) {
 		}
 		
 	//});
+}
+
+mapClass.prototype.displaySQL = function(results) {
+	if(this.infoWindow) this.infoWindow.close();
+	for(var i = 1;i < this.markers.length;i++)
+		this.markers[i].setMap(null);
+	this.markers = [];
+	this.markers.push(this.myMarker);
+	
+	if (results.length == 0) {
+		//var temp = document.querySelector("#loading");
+		//debugger;
+		alert("No results found");
+		$("#loading").accordion({active:'none'});
+	}
+	else{
+		//console.log(results);
+		for(var i = 0;i < results.businesses.length;i++) {
+			var business = results[i];
+			
+			var coord = new google.maps.LatLng(business['latitude'],business['longitude']);
+			
+			var address = business['streetAddress'] + ' ';
+			address += business['city'] + ', ' + business['region'];
+			address += ' ' + business['zip'];
+			
+			var priceRange = { data_remainder : '', price_range : business['avgPrice'] };
+			if(priceRange < 11) priceRange.price_range = 1;
+			else if(priceRange < 31) priceRange.price_range = 2;
+			else if(priceRange < 60) priceRange.price_range = 3;
+			else priceRange.price_range = 4;
+			priceRange.data_remainder = '$$$$'.substr(priceRange.priceRange);
+			
+			map.addMarker(coord,business.name,business.rating_img_url,business.image_url
+			,address,business.display_phone,business['website'],
+			,undefined,undefined,priceRange);
+		}
+		//done here
+		if(filterCount == results.businesses.length)
+			alert('No results found at that rating');
+		
+		$("#loading").accordion({active:'none'});
+	}
 }
