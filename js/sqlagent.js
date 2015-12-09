@@ -1,6 +1,8 @@
 "use strict";
 
-function SQLAgent(src) {};
+function SQLAgent(map) {
+	this.map = map;
+};
 
 SQLAgent.prototype.randomPrice = function(range) {
 	var price;
@@ -144,7 +146,7 @@ SQLAgent.prototype.process = function(results,meta) {
 		meta.sql.offers += offers + ',';
 		meta.sql.open += _open + ',';
 	}
-	console.log('yea');
+	//console.log('yea');
 }
 
 SQLAgent.prototype.populate = function() {
@@ -346,4 +348,29 @@ SQLAgent.prototype.reviewSQL = function(id, username, restID, foodID, review) {
 	sql += ',' + restID;
 	sql += ')';
 	return sql;
+}
+
+SQLAgent.prototype.updateDistances = function() {
+	var sql = 'SELECT * FROM Location;';
+	//pass sql to db
+	var results;
+	sql = '';
+	for(var i = 0;i < results.length;i++) {
+		sql += 'UPDATE Location SET distFromUser='
+		var dist = google.maps.geometry.spherical.computeDistanceBetween(p1,p2).toFixed(2);
+		sql += dist + ' WHERE id=' results[i][id] + ';';
+	}
+	//pass updates to db
+}
+
+SQLAgent.prototype.passRequest = function(params,rating) {
+	var sql = 'SELECT * FROM Restaurant AS r';
+	sql 	+='((JOIN Specializes AS s ON s.restaurant=r.id) JOIN Category AS c ON c.id=s.category)';
+	sql		+=' JOIN Location AS l WHERE l.id=r.location WHERE ';
+	sql		+=' c.[name]="' + params.category_filter + '"';
+	sql		+=' AND l.distanceFromUser<=' + params.radius_filter;
+	sql		+=' AND r.rating>=' + rating + ';';
+	//pass on the sql
+	var results;
+	map.displaySQL(results);
 }
