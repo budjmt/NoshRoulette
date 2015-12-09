@@ -91,7 +91,8 @@ mapClass.prototype.addMarker = function(position,title,ratingImg,img,address,pho
 	info += "<div id = popContent>"
 	info += "<div class=popText>";
 	info += '<h3 id=popTitle>' + title + '</h3>';
-	info += '<img id=rating src="' + ratingImg + '" />';
+	//info += '<img id=rating src="' + ratingImg + '" />';
+	info += '<p style="color:red;">' + ratingImg + '/5 stars</p>';
 	if(price) {
 		info += '<p><span class="price" data-remainder="' + price.data_remainder + '">' 
 			+ "$$$$".substring(price.data_remainder.length) + '</span>';
@@ -106,7 +107,8 @@ mapClass.prototype.addMarker = function(position,title,ratingImg,img,address,pho
 	info += '<p class=interiorText>' + address + '</p>';
 	//if(hours) info += hours;//already a table element
 	//if(menu)  info += '<p><b>' + menu + '</b></p>';//already a link element
-	info += '<h3 class=interiorText>Phone: ' + phone + '</h3>';
+	if(phone)
+		info += '<h3 class=interiorText>Phone: ' + phone + '</h3>';
 	info += '<h3 class=interiorText>Website:</h3> <a href="' + website + '">' + website + '</a></p>';
 	info += "</div>";
 	info += '<button id="closeButton">close</button>'
@@ -264,8 +266,6 @@ mapClass.prototype.displaySQL = function(results) {
 	this.markers.push(this.myMarker);
 	
 	if (results.length == 0) {
-		//var temp = document.querySelector("#loading");
-		//debugger;
 		alert("No results found");
 		$("#loading").accordion({active:'none'});
 	}
@@ -286,9 +286,17 @@ mapClass.prototype.displaySQL = function(results) {
 			else if(priceRange < 60) priceRange.price_range = 3;
 			else priceRange.price_range = 4;
 			priceRange.data_remainder = '$$$$'.substr(priceRange.priceRange);
+			if(dataRemainder.length < 1)
+				priceRange.price_range = "Above $61";
+			else if(dataRemainder.length < 2)
+				priceRange.price_range = "$31-60";
+			else if(dataRemainder.length < 3)
+				priceRange.price_range = "$11-30";
+			else
+				priceRange.price_range = "Under $10";
 			
-			map.addMarker(coord,business.name,business.rating_img_url,business.image_url
-			,address,business.display_phone,business['website'],
+			map.addMarker(coord,business['name'],business['rating'],undefined
+			,address,undefined,business['website'],
 			,undefined,undefined,priceRange);
 		}
 		//done here
