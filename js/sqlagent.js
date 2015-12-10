@@ -350,21 +350,52 @@ SQLAgent.prototype.reviewSQL = function(id, username, restID, foodID, review) {
 	return sql;
 }
 
-SQLAgent.prototype.updateDB = function() {
+SQLAgent.prototype.updateDB = function(query) {
+    xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() 
+    {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+        {
+            document.getElementById("print").innerHTML = xmlhttp.responseText;
+        }
+    };
+    xmlhttp.open("GET","SelectDB.php?sql="+query,true);
+    xmlhttp.send();
+}
+
+SQLAgent.prototype.selectFromDB = function(query,callback) {
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() 
+    {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+        {
+            callback(JSON.parse(xmlhttp.responseText));
+        }
+    };
+    xmlhttp.open("GET","SelectDB.php?sql="+encodeURI(query),true);
+    xmlhttp.send();
+}
+
+SQLAgent.prototype.updateAttributes = function() {
 	var sql = 'SELECT * FROM Location;';
-	//pass sql to db
-	var locations;
-	for(var i = 0;i < results.length;i++) {
-		sql += 'UPDATE Location SET distFromUser='
-		var dist = google.maps.geometry.spherical.computeDistanceBetween(
-		this.map.initialLocation
-		,new google.maps.LatLng(results[i]['latitude'],results[i]['longitude']).toFixed(2);
-		sql += dist + ' WHERE id=' results[i]['id'] + ';';
+	this.selectFromDB(sql,callback);
+	function callback(locations) {
+		sql = '';
+		for(var i = 0;i < results.length;i++) {
+			sql += 'UPDATE Location SET distFromUser='
+			var dist = google.maps.geometry.spherical.computeDistanceBetween(
+			this.map.initialLocation
+			,new google.maps.LatLng(locations[i]['latitude'],locations[i]['longitude']).toFixed(2);
+			sql += dist + ' WHERE id=' locations[i]['id'] + ';';
+		}
+		
+		sql += ' WITH avgPrices AS (SELECT r2.id,AVG(price) AS avgPrice';
+		sql += ' FROM MenuItem AS m JOIN Restaurant AS r2 ON m.restaurant=r2.id)';
+		sql += ' UPDATE r1 SET avgPrice=avgPrices.avgPrice';
+		sql += ' FROM Restaurant r1 JOIN avgPrices ON r1.id = avgPrices.id';
+		this.updateDB(sql);
 	}
-	sql += ' WITH avgPrices AS (SELECT r2.id,AVG(price) AS avgPrice FROM MenuItem AS m JOIN Restaurant AS r2 ON m.restaurant=r2.id)';
-	sql += ' UPDATE r1 SET avgPrice=avgPrices.avgPrice';
-	sql += ' FROM Restaurant r1 JOIN avgPrices ON r1.id = avgPrices.id';
-	//pass updates to db
 }
 
 SQLAgent.prototype.passRequest = function(params,rating) {
@@ -374,7 +405,8 @@ SQLAgent.prototype.passRequest = function(params,rating) {
 	sql		+=' c.[name]="' + params.category_filter + '"';
 	sql		+=' AND l.distanceFromUser<=' + params.radius_filter;
 	sql		+=' AND r.avgRating>=' + rating + ';';
-	//pass on the sql
-	var results;
-	map.displaySQL(results);
+	this,selectFromDB(sql,callback);
+	function callback(results){
+		map.displaySQL(results);
+	}
 }

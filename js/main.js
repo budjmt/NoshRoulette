@@ -2,7 +2,7 @@
 
 //reason this is global is so the google maps callback can work
 var map = new mapClass();
-var sql = new SQLAgent();
+var sql = new SQLAgent(map);
 var yelp;
 
 window.onload = (function(){
@@ -121,6 +121,10 @@ function init() {
 		updateUserPref('distance',distance.selectedIndex);
 	};
 	
+	//
+	sql.updateAttributes();
+	//
+	
 	document.getElementById('searchButton').onclick = function() {
 		
 	$("#loading").accordion({active:0});
@@ -140,7 +144,8 @@ function init() {
 			//filter for rating after data is retrieved
 		};
 		//console.log(query);
-		yelp.getRequest(query,rating);//in yelp.js
+		//yelp.getRequest(query,rating);//in yelp.js
+		sql.passRequest(query,rating);
 	}
 }
 
