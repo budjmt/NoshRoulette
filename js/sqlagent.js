@@ -387,14 +387,14 @@ SQLAgent.prototype.updateAttributes = function() {
 			sql += 'UPDATE Location SET distFromUser='
 			var dist = google.maps.geometry.spherical.computeDistanceBetween(
 			this.map.initialLocation
-			,new google.maps.LatLng(locations[i]['latitude'],locations[i]['longitude']).toFixed(2);
+			,new google.maps.LatLng(locations[i]['latitude'],locations[i]['longitude']).toFixed(2));
 			sql += dist + ' WHERE id=' locations[i]['id'] + ';';
 		}
 		
 		sql += ' WITH avgPrices AS (SELECT r2.id,AVG(price) AS avgPrice';
 		sql += ' FROM MenuItem AS m JOIN Restaurant AS r2 ON m.restaurant=r2.id)';
 		sql += ' UPDATE r1 SET avgPrice=avgPrices.avgPrice';
-		sql += ' FROM Restaurant r1 JOIN avgPrices ON r1.id = avgPrices.id';
+		sql += ' FROM Restaurant r1 JOIN avgPrices ON r1.id = avgPrices.id;';
 		this.updateDB(sql);
 	}
 }
