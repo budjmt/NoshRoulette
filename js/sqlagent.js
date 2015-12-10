@@ -357,10 +357,11 @@ SQLAgent.prototype.updateDB = function(query) {
     {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
         {
-            document.getElementById("print").innerHTML = xmlhttp.responseText;
+            //document.getElementById("print").innerHTML = xmlhttp.responseText;
+			console.log(xhr.responseText);
         }
     };
-    xmlhttp.open("GET","sql/SelectDB.php?sql="+query,true);
+    xmlhttp.open("GET","sql/UpdateDB.php?sql="+encodeURI(query),true);
     xmlhttp.send();
 }
 
