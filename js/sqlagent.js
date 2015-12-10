@@ -360,7 +360,7 @@ SQLAgent.prototype.updateDB = function(query) {
             document.getElementById("print").innerHTML = xmlhttp.responseText;
         }
     };
-    xmlhttp.open("GET","SelectDB.php?sql="+query,true);
+    xmlhttp.open("GET","sql/SelectDB.php?sql="+query,true);
     xmlhttp.send();
 }
 
@@ -373,7 +373,7 @@ SQLAgent.prototype.selectFromDB = function(query,callback) {
             callback(JSON.parse(xmlhttp.responseText));
         }
     };
-    xmlhttp.open("GET","SelectDB.php?sql="+encodeURI(query),true);
+    xmlhttp.open("GET","sql/SelectDB.php?sql="+encodeURI(query),true);
     xmlhttp.send();
 }
 
