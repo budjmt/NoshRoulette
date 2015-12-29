@@ -296,7 +296,7 @@ mapClass.prototype.displaySQL = function(results) {
 				priceRange.price_range = "Under $10";
 			
 			map.addMarker(coord,business['name'],business['rating'],undefined
-			,address,undefined,business['website'],
+			,address,undefined,business['website']
 			,undefined,undefined,priceRange);
 		}
 		//done here

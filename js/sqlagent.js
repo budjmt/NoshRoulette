@@ -162,7 +162,7 @@ SQLAgent.prototype.populate = function() {
 	  , describes	: 'Describes(category,food)'
 	  , 'open'		: '[Open](restaurant,weekday,openTime,closeTime)'
 	  , user		: '[User](username,passwd,preferredDist,preferredPrice)'
-	  , review		: 'Review(id,rating,review)'
+	  , review		: 'Review(id,rating,review,[user],reviewFood,reviewRestaurant)'
 	};
 	for(var relation in relations)
 		relations[relation] = 'INSERT INTO ' + relations[relation] + ' VALUES ';
@@ -322,8 +322,8 @@ SQLAgent.prototype.openSQL = function(restID, hours) {
 	var sql = '(';
 	sql += restID;
 	sql += ',' + '"' + hours.weekday + '"';
-	sql += ',' + hours.hours.open;
-	sql += ',' + hours.hours.close;
+	sql += ',' + '"' + hours.hours.open + ':00:00' + '"';
+	sql += ',' + '"' + hours.hours.close + ':00:00' + '"';
 	sql += ')';
 	return sql;
 }
@@ -351,7 +351,7 @@ SQLAgent.prototype.reviewSQL = function(id, username, restID, foodID, review) {
 }
 
 SQLAgent.prototype.updateDB = function(query) {
-    xmlhttp = new XMLHttpRequest();
+    var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function() 
     {
@@ -366,7 +366,7 @@ SQLAgent.prototype.updateDB = function(query) {
 }
 
 SQLAgent.prototype.selectFromDB = function(query,callback) {
-    xmlhttp = new XMLHttpRequest();
+    var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() 
     {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
@@ -384,15 +384,15 @@ SQLAgent.prototype.updateAttributes = function() {
 	function callback(locations) {
 		sql = '';
 		for(var i = 0;i < results.length;i++) {
-			sql += 'UPDATE Location SET distFromUser='
+			sql += 'UPDATE Location SET distFromUser=';
 			var dist = google.maps.geometry.spherical.computeDistanceBetween(
 			this.map.initialLocation
 			,new google.maps.LatLng(locations[i]['latitude'],locations[i]['longitude']).toFixed(2));
-			sql += dist + ' WHERE id=' locations[i]['id'] + ';';
+			sql += dist + ' WHERE id=' + locations[i]['id'] + ';';
 		}
 		
 		sql += ' WITH avgPrices AS (SELECT r2.id,AVG(price) AS avgPrice';
-		sql += ' FROM MenuItem AS m JOIN Restaurant AS r2 ON m.restaurant=r2.id)';
+		sql += ' FROM MenuItem AS m JOIN Restaurant AS r2 ON m.restaurant=r2.id GROUP BY r2.id)';
 		sql += ' UPDATE r1 SET avgPrice=avgPrices.avgPrice';
 		sql += ' FROM Restaurant r1 JOIN avgPrices ON r1.id = avgPrices.id;';
 		this.updateDB(sql);
