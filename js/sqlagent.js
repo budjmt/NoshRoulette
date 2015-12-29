@@ -383,7 +383,7 @@ SQLAgent.prototype.updateAttributes = function() {
 	this.selectFromDB(sql,callback);
 	function callback(locations) {
 		sql = '';
-		for(var i = 0;i < results.length;i++) {
+		for(var i = 0;i < locations.length;i++) {
 			sql += 'UPDATE Location SET distFromUser=';
 			var dist = google.maps.geometry.spherical.computeDistanceBetween(
 			this.map.initialLocation
